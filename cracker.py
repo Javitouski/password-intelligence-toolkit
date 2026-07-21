@@ -26,7 +26,7 @@ class Cracker:
     def entropy(self) -> EntropyResult:
         """Calculates password entropy in bits and estimates rupture time based on benchmark."""
         if not self.charset or not self.max_length:
-            return {'Entropy': 0.0, 'breakTime': 0.0, 'formatted_time': '0 seconds'}
+            return EntropyResult(entropy_bits=0.0, break_time_seconds=0.0, formatted_time='0 seconds')
 
         charset_size = len(self.charset)
         password_length = self.max_length
@@ -81,7 +81,7 @@ class Cracker:
                     return AttackResult(
                         word= attempt_word, 
                         attempts= attempts, 
-                        velocity= velocity, 
+                        velocity= int(velocity), 
                         execution_time= execution_time,
                     )
         return None
