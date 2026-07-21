@@ -1,0 +1,37 @@
+name: CI Code Quality
+
+# Determina cuándo se ejecuta el pipeline
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+jobs:
+    type-check:
+        runs-on: ubuntu-latest
+
+        steps:
+            # 1. Clona tu repositorio dentro de la máquina virtual de GitHub
+            - name: Checkout repository
+              uses: actions/checkout@v3
+            # 2. Prepara el entorno de Python 3.11
+
+            - name: Set up Python 3.11
+              uses: actions/setup-python@v4
+              with:
+                python-version: 3.11
+
+            # 3. Instala las herramientas de análisis estático
+
+            - name: Install dependencies
+              run: |
+                python -m pip install --upgrade pip
+                pip install mypy
+            
+            # 4. Ejecuta el verificador estático de tipos sobre tu código
+            - name: Run Type Check with MyPy
+              run: |
+                mypy cracker.py
+
+
