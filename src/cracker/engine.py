@@ -13,12 +13,18 @@ class CrackerEngine:
         self.max_length = max_length
     
     def entropy(self)-> EntropyResult:
+        if not self.charset or not self.max_length:
+            return EntropyResult(entropy_bits=0.0, break_time_seconds=0.0, formatted_time='0 seconds')
         return entropy(self.charset, self.max_length)
     
     def attack(self) -> Optional[AttackResult]:
+        if not self.target_hash or not self.charset or not self.max_length:
+            return None
         return attack(self.target_hash, self.charset, self.max_length )
     
     def dictionary_attack(self, dictionary: str) -> Optional[AttackResult]:
+        if not self.target_hash or not dictionary:
+            return None
         return dictionary_attack(self.target_hash, dictionary)
     
     @staticmethod
