@@ -32,6 +32,6 @@ jobs:
             # 4. Ejecuta el verificador estático de tipos sobre tu código
             - name: Run Type Check with MyPy
               run: |
-                mypy cracker.py
+                mypy main.py src/
 
 
