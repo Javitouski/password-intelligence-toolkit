@@ -17,15 +17,20 @@ class CrackerEngine:
             return EntropyResult(entropy_bits=0.0, break_time_seconds=0.0, formatted_time='0 seconds')
         return entropy(self.charset, self.max_length)
     
-    def attack(self) -> Optional[AttackResult]:
-        if not self.target_hash or not self.charset or not self.max_length:
+    def attack(self, target_hash: Optional[str] = None) -> Optional[AttackResult]:
+        hash_to_attack = target_hash or self.target_hash
+
+        if not hash_to_attack or not self.charset or not self.max_length:
             return None
-        return attack(self.target_hash, self.charset, self.max_length )
+        
+        return attack(hash_to_attack, self.charset, self.max_length )
     
-    def dictionary_attack(self, dictionary: str) -> Optional[AttackResult]:
-        if not self.target_hash or not dictionary:
+    def dictionary_attack(self, dictionary: str, target_hash: Optional[str] = None) -> Optional[AttackResult]:
+        hash_to_attack = target_hash or self.target_hash
+
+        if not hash_to_attack or not dictionary:
             return None
-        return dictionary_attack(self.target_hash, dictionary)
+        return dictionary_attack(hash_to_attack, dictionary)
     
     @staticmethod
     def create_hash(plain_text: str) -> HashResult:
