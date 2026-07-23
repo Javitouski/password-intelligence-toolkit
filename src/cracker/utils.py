@@ -24,22 +24,22 @@ def entropy(charset: str, password_length:int, hash_rate: float = 100_000_000.0)
     entropy_bits = password_length * math.log2(charset_size)
     combinations = 2 ** entropy_bits
     break_time = combinations / hash_rate
-    read_time = ""
+    formatted_time = ""
 
     if break_time < 60:
-        read_time = f"{break_time:.2f} seconds"
+        formatted_time = f"{break_time:.2f} seconds"
     elif break_time < 3600:
         minutes = break_time / 60
-        read_time = f"{minutes:.2f} minutes"
+        formatted_time = f"{minutes:.2f} minutes"
     elif break_time < 86400:
         hours = break_time / 3600
-        read_time = f"{hours:.2f} hours"
+        formatted_time = f"{hours:.2f} hours"
     else:
         real_days = break_time / 86400
-        read_time = f"{real_days:.2f} days"
+        formatted_time = f"{real_days:.2f} days"
 
     return EntropyResult(
         entropy_bits= entropy_bits,
         break_time_seconds= break_time,
-        formatted_time= read_time,
+        formatted_time= formatted_time,
     )

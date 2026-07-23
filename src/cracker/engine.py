@@ -1,6 +1,6 @@
-from typing import Optional, Any
+from typing import Optional
 from src.cracker.models import EntropyResult, AttackResult, HashResult
-from src.cracker.utils import benchmark, entropy
+from src.cracker.utils import entropy
 from src.cracker.attacks.brute_force import attack
 from src.cracker.attacks.dictionary import dictionary_attack
 from src.cracker.hashes import create_hash

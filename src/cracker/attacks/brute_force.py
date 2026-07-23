@@ -14,9 +14,9 @@ def attack(target_hash: str, charset: str, max_length: int) -> AttackResult | No
     start = time.time()
     
     for i in range(1, max_length + 1):
-        for combinations in itertools.product(charset, repeat=i):
+        for candidate in itertools.product(charset, repeat=i):
             attempts += 1
-            attempt_word = "".join(combinations)
+            attempt_word = "".join(candidate)
             candidate_hash = hashlib.sha256(attempt_word.encode('utf-8')).hexdigest()
             
             if candidate_hash == target_hash:
@@ -26,7 +26,7 @@ def attack(target_hash: str, charset: str, max_length: int) -> AttackResult | No
                 if execution_time == 0:
                     execution_time = 0.0001
                     
-                velocity = attempts // execution_time
+                velocity = attempts / execution_time
                 
                 return AttackResult(
                     word= attempt_word, 

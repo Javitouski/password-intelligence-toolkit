@@ -1,38 +1,47 @@
 import string
 from src.cracker.engine import CrackerEngine
+WIDTH = 42
+
 
 def main():
     options = 0
-    print(f"--- Select one of the options ---")
-    print(f"1.- Enter the hash to crack ")
-    print(f"2.- Enter the word to hash")
-    print(f"3.- Try dictionary attack")
-    print(f"4.- Exit")
+    print()
+    print("=" * WIDTH)
+    print("Password Intelligence Toolkit".center(WIDTH))
+    print("=" * WIDTH)
+    print()
+    print(f" Select an option: ")
+    print()
+    print(f"    1.- Brute Force Attack ")
+    print(f"    2.- Generate SHA-256 Hash")
+    print(f"    3.- Dictionary Attack")
+    print(f"    4.- Exit")
+    print()
     while options != 4:
         try:
-            options = int(input(f"Please, choose an option: "))
+            options = int(input(f"Option: "))
             if options < 1 or options > 4:
-                raise ValueError(f"That option is not available")
+                raise ValueError(f"[!] Invalid option.")
             if options == 1:
-                target_hash = input("Write the hash you want break:  ")
+                target_hash = input("Target SHA-256 hash:  ")
                 while True:
                     charset = ""
-                    lower = input(f"Include lowercasse? (s/n): ").lower()
-                    upper = input(f"Include uppercase? (s/n): ").lower()
-                    digits = input(f"Include digits? (s/n): ").lower()
-                    symbols = input(f"Include symbols? (s/n): ").lower()                    
-                    if lower == "s":
+                    lower = input(f"Include lowercase letters? (y/N): ").lower()
+                    upper = input(f"Include uppercase letters? (y/N): ").lower()
+                    digits = input(f"Include digits? (y/N): ").lower()
+                    symbols = input(f"Include symbols? (y/N): ").lower()                    
+                    if lower == "y":
                         charset += string.ascii_lowercase
-                    if upper == "s":
+                    if upper == "y":
                         charset += string.ascii_uppercase
-                    if digits == "s":
+                    if digits == "y":
                         charset += string.digits
-                    if symbols == "s":
+                    if symbols == "y":
                         charset += string.punctuation
                     if charset:
                         break
                     else:
-                        print(f"Error! You need to choose at least one option.")
+                        print(f"[!] Select at least one character set.")
                 max_length = int(input(f"What is the length of the password?: "))
                 cracker_result = CrackerEngine(target_hash, charset, max_length)
                 entropy = cracker_result.entropy()
@@ -41,35 +50,45 @@ def main():
                 else:
                     attack = cracker_result.attack()
                     if attack:
-                        print(f"Match found!: {attack.word}")
-                        print(f"Time: {attack.execution_time:.5f} seconds!")
-                        print(f"Total of tries: {attack.attempts :,} try/tries")
-                        print(f"The speed of math is: {attack.velocity : ,} words/seconds")
+                        print()
+                        print("=" * WIDTH)
+                        print("Attack Summary".center(WIDTH))
+                        print("=" * WIDTH)
+                        print()
+                        print("[+] Password recovered successfully")
+                        print()
+                        print(f"{'Recovered Password':<18}: {attack.word}")
+                        print(f"{'Execution Time':<18}: {attack.execution_time:.5f} s")
+                        print(f"{'Attempts':<18}: {attack.attempts:,}")
+                        print(f"{'Processing Rate':<18}: {attack.velocity:,} H/s")
+                        print("=" * WIDTH)
                     else:
-                        print(f"We can't break the hash. Sorry!")
+                        print(f"[-] No matching password found.")
             elif options == 2:
-                hash_input = input(f"Please, write the word to hash: ")
+                hash_input = input(f"Plain text: ")
                 hashing = CrackerEngine.create_hash(hash_input)
-                print(f"The word to hash is: {hashing.plain_text} and it is: {hashing.hash_value}")
+                print(f"SHA-256:: {hashing.plain_text} and it is: {hashing.hash_value}")
             elif options == 3:
-                target_hash = input("Write the hash to broken:  ")
-                dictionary_name = input(f"What is the name of the dictionary/file?: ")
+                target_hash = input("Target SHA-256 hash:  ")
+                dictionary_name = input(f"Dictionary file: ")
                 dcattack = CrackerEngine(target_hash)
-                print(f"Starting the dictionary attack with the file {dictionary_name}...")
+                print(f"[*] Starting dictionary attack on {dictionary_name}...")
                 try:
+                    print("[*] Running...")
                     attack_result = dcattack.dictionary_attack(dictionary_name)
                 except FileNotFoundError:
-                    print(f"Sorry, the file {dictionary_name} was not found.")
+                    print(f"[-] Dictionary file not found.")
                     attack_result = None
                 if attack_result:
-                    print(f"PASSWORD FOUND!: {attack_result.word}.")
-                    print(f"Time taken: {attack_result.execution_time:.5f} seconds.")
+                    print(f"[+] Password found!: {attack_result.word}.")
+                    print(f"[+] Total attempts: {attack_result.attempts}.")
+                    print(f"[+] Execution time: {attack_result.execution_time:.5f} seconds.")
                 else:
                     print(f"Something went wrong. Sorry!")
             else:
-                print(f"See you soon!")
+                print(f"Exiting Password Intelligence Toolkit...")
         except ValueError as e:
-            print(f"Sorry, thats not an available option. {e}")
+            print(f"[!] Invalid option. Please choose a value between 1 and 4. {e}")
         # except Exception as e:
             # print(f"Something went wrong. {e}")
 
