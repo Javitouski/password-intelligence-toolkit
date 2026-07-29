@@ -12,10 +12,10 @@ class CrackerEngine:
         self.charset = charset
         self.max_length = max_length
     
-    def entropy(self)-> EntropyResult:
+    def entropy(self, hash_rate: float = 100_000_000)-> EntropyResult:
         if not self.charset or not self.max_length:
             return EntropyResult(entropy_bits=0.0, break_time_seconds=0.0, formatted_time='0 seconds')
-        return entropy(self.charset, self.max_length)
+        return entropy(self.charset, self.max_length, hash_rate)
     
     def attack(self, target_hash: Optional[str] = None) -> Optional[AttackResult]:
         hash_to_attack = target_hash or self.target_hash
