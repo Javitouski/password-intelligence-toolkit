@@ -154,9 +154,9 @@ Antes de iniciar el ataque, la herramienta ejecuta un benchmark local para estim
 
 La herramienta calcula la entropía teórica mediante:
 
-\[
+$$
 H = L \times \log_2(N)
-\]
+$$
 
 Donde:
 
